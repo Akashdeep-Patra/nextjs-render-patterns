@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { getPlaiceholder } from 'plaiceholder';
 import { ParsedUrlQuery } from 'querystring';
 import { getPostDataById, getPosts } from '../../../api';
@@ -54,14 +55,17 @@ const ServerSideGeneration: NextPage<{
   posts: IPost[];
   placeholder: string;
 }> = ({ post, posts, placeholder }) => {
+  const router = useRouter();
   return (
     <div className='pl-5 flex gap-5 pt-5'>
       <div className='flex flex-col gap-2 h-[100vh] pl-5 capitalize w-[30%] justify-between overflow-y-auto'>
         {posts.map((post) => (
-          <div key={post.id} className=' bg-slate-500  rounded-sm p-5'>
-            <Link className=' hover:text-sky-600' href={`${post.id}`}>
-              {post.text}
-            </Link>
+          <div
+            onClick={() => router.push(`${post.id}`)}
+            key={post.id}
+            className=' bg-slate-500  rounded-sm p-5'
+          >
+            <span className=' cursor-pointer'>{post.text}</span>
           </div>
         ))}
       </div>
