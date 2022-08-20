@@ -6,24 +6,23 @@ import { getPostDataById, getPosts } from '../../../api';
 import { IPost } from '../../../api/types';
 
 interface IParams extends ParsedUrlQuery {
-  slug: string;
+  id: string;
 }
 export const getStaticPaths: GetStaticPaths<IParams> = async () => {
   const { data } = await getPosts();
   return {
     paths: data.data.map((post) => ({
       params: {
-        slug: post.id,
+        id: post.id,
       },
     })),
-
-    fallback: true,
+    fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug } = context?.params as IParams;
-  const { data } = await getPostDataById(slug);
+  const { id } = context?.params as IParams;
+  const { data } = await getPostDataById(id);
 
   return {
     props: {
