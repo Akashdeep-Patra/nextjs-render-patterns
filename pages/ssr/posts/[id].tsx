@@ -1,42 +1,22 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import React from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getPlaiceholder } from 'plaiceholder';
 import { ParsedUrlQuery } from 'querystring';
 import { getPostDataById, getPosts } from '../../../api';
 import { IPost } from '../../../api/types';
 
-interface IParams extends ParsedUrlQuery {
-  id: string[];
+interface ServerParams extends ParsedUrlQuery {
+  id: string;
 }
-export const getStaticPaths: GetStaticPaths<IParams> = async () => {
-  const { data } = await getPosts();
-  return {
-    paths: [
-      ...data.data.map((post) => ({
-        params: {
-          id: [post.id],
-        },
-      })),
-      {
-        params: {
-          id: [''],
-        },
-      },
-    ],
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context?.params as IParams;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context?.params as ServerParams;
   const posts = (await getPosts()).data.data;
-  const post = !id ? null : (await getPostDataById(id?.[0])).data;
+  const post = !id ? null : (await getPostDataById(id)).data;
   let placeholder: string = '';
-  let imageProps;
   if (post) {
-    const { base64, img } = await getPlaiceholder(post?.image, {
+    const { base64 } = await getPlaiceholder(post?.image, {
       size: 10,
     });
     placeholder = base64;
@@ -49,7 +29,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 };
-
 const ServerSideGeneration: NextPage<{
   post: IPost;
   posts: IPost[];
