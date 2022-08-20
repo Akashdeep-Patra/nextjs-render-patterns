@@ -27,7 +27,7 @@ const ServerSideGeneration: NextPage<{
       <div className='flex flex-col gap-2 h-[100vh] pl-5 capitalize w-[30%] justify-between overflow-y-auto'>
         {posts.map((post) => (
           <div
-            onClick={() => router.push(`${post.id}`)}
+            onClick={() => router.push(`posts/${post.id}`)}
             key={post.id}
             className=' bg-slate-500 cursor-pointer  rounded-sm p-5'
           >
