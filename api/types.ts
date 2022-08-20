@@ -9,6 +9,7 @@ export interface IPost {
     lastName: string;
     picture: string;
   };
+  placeHolderUrl: string;
   publishDate: string;
   tags: Array<string>;
   text: string;
