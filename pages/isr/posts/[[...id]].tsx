@@ -34,6 +34,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const posts = (await getPosts()).data.data;
   const post = !id ? null : (await getPostDataById(id?.[0])).data;
   let placeholder: string = '';
+  let imageProps;
   if (post) {
     const { base64, img } = await getPlaiceholder(post?.image, {
       size: 10,
@@ -46,6 +47,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
       placeholder,
       posts,
     },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 60 seconds
+    revalidate: 60, // In seconds
   };
 };
 

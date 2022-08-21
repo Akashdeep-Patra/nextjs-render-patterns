@@ -13,9 +13,14 @@ interface ServerParams extends ParsedUrlQuery {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context?.params as ServerParams;
   const posts = (await getPosts()).data.data;
-  const post = !id ? null : (await getPostDataById(id)).data;
+  let post: IPost | null | 'not-found' = null;
+  try {
+    post = !id ? null : (await getPostDataById(id)).data;
+  } catch (error) {
+    post = 'not-found';
+  }
   let placeholder: string = '';
-  if (post) {
+  if (post && post !== 'not-found') {
     const { base64 } = await getPlaiceholder(post?.image, {
       size: 10,
     });
@@ -30,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 const ServerSideGeneration: NextPage<{
-  post: IPost;
+  post: IPost | null | 'not-found';
   posts: IPost[];
   placeholder: string;
 }> = ({ post, posts, placeholder }) => {
@@ -48,23 +53,25 @@ const ServerSideGeneration: NextPage<{
           </div>
         ))}
       </div>
-      <div className=''>
-        {post && (
-          <>
-            <Image
-              className='rounded-lg'
-              src={post.image}
-              alt='post-image'
-              loading='lazy'
-              width={500}
-              height={400}
-              placeholder='blur'
-              blurDataURL={placeholder}
-            />
-            <h1 className=' text-2xl capitalize'>{post.text}</h1>
-          </>
-        )}
-      </div>
+      {post && post !== 'not-found' ? (
+        <div className=''>
+          <Image
+            className='rounded-lg'
+            src={post.image}
+            alt='post-image'
+            loading='lazy'
+            width={500}
+            height={400}
+            placeholder='blur'
+            blurDataURL={placeholder}
+          />
+          <h1 className=' text-2xl capitalize'>{post.text}</h1>
+        </div>
+      ) : (
+        <div className='w-full flex justify-center items-center'>
+          <h1 className=' text-3xl'>This Post does not exist</h1>
+        </div>
+      )}
     </div>
   );
 };
