@@ -7,6 +7,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { getPostDataById, getPosts } from '../../api';
 import { IPost } from '../../api/types';
 import Post from '../../components/Post.client';
+import PostListItem from '../../components/PostListItem';
 
 interface ServerParams extends ParsedUrlQuery {
   id: string;
@@ -46,14 +47,7 @@ const ServerSideGeneration: NextPage<{
     <div className='pl-5 flex gap-5 pt-5'>
       <div className='flex flex-col gap-2 h-[100vh] pl-5 capitalize w-[30%] justify-between overflow-y-auto'>
         {posts.map((post) => (
-          <Suspense key={post.id} fallback='Loading...'>
-            <div
-              onClick={() => router.push(`${post.id}`)}
-              className=' bg-slate-500 cursor-pointer  rounded-sm p-5'
-            >
-              <span>{post.text}</span>
-            </div>
-          </Suspense>
+          <PostListItem post={post} key={post.id} />
         ))}
       </div>
       {post && post !== 'not-found' ? (
