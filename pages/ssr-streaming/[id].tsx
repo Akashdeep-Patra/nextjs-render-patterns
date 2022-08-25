@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { getPlaiceholder } from 'plaiceholder';
 import { ParsedUrlQuery } from 'querystring';
-import { getPostDataById, getPosts } from '../../../api';
-import { IPost } from '../../../api/types';
-import Post from '../../../components/Post.client';
+import { getPostDataById, getPosts } from '../../api';
+import { IPost } from '../../api/types';
+import Post from '../../components/Post.client';
 
 interface ServerParams extends ParsedUrlQuery {
   id: string;
@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
 const ServerSideGeneration: NextPage<{
   post: IPost | null | 'not-found';
   posts: IPost[];
@@ -44,17 +45,16 @@ const ServerSideGeneration: NextPage<{
   return (
     <div className='pl-5 flex gap-5 pt-5'>
       <div className='flex flex-col gap-2 h-[100vh] pl-5 capitalize w-[30%] justify-between overflow-y-auto'>
-        <Suspense fallback='Loading...'>
-          {posts.map((post) => (
+        {posts.map((post) => (
+          <Suspense key={post.id} fallback='Loading...'>
             <div
               onClick={() => router.push(`${post.id}`)}
-              key={post.id}
               className=' bg-slate-500 cursor-pointer  rounded-sm p-5'
             >
               <span>{post.text}</span>
             </div>
-          ))}
-        </Suspense>
+          </Suspense>
+        ))}
       </div>
       {post && post !== 'not-found' ? (
         <div className=''>

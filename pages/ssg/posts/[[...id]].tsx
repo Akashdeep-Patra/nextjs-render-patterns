@@ -6,6 +6,7 @@ import { getPlaiceholder } from 'plaiceholder';
 import { ParsedUrlQuery } from 'querystring';
 import { getPostDataById, getPosts } from '../../../api';
 import { IPost } from '../../../api/types';
+import Post from '../../../components/Post.client';
 
 interface IParams extends ParsedUrlQuery {
   id: string[];
@@ -69,21 +70,7 @@ const ServerSideGeneration: NextPage<{
         ))}
       </div>
       <div className=''>
-        {post && (
-          <>
-            <Image
-              className='rounded-lg'
-              src={post.image}
-              alt='post-image'
-              loading='lazy'
-              width={500}
-              height={400}
-              placeholder='blur'
-              blurDataURL={placeholder}
-            />
-            <h1 className=' text-2xl capitalize'>{post.text}</h1>
-          </>
-        )}
+        {post && <Post post={post} placeholder={placeholder} />}
       </div>
     </div>
   );

@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     domains: ['img.dummyapi.io'],
   },
+  experimental: {
+    runtime: 'experimental-edge',
+  },
 };
 
 module.exports = nextConfig;
