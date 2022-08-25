@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
 const ServerSideGeneration: NextPage<{
   post: IPost | null | 'not-found';
   posts: IPost[];
@@ -44,17 +45,15 @@ const ServerSideGeneration: NextPage<{
   return (
     <div className='pl-5 flex gap-5 pt-5'>
       <div className='flex flex-col gap-2 h-[100vh] pl-5 capitalize w-[30%] justify-between overflow-y-auto'>
-        <Suspense fallback='Loading...'>
-          {posts.map((post) => (
-            <div
-              onClick={() => router.push(`${post.id}`)}
-              key={post.id}
-              className=' bg-slate-500 cursor-pointer  rounded-sm p-5'
-            >
-              <span>{post.text}</span>
-            </div>
-          ))}
-        </Suspense>
+        {posts.map((post) => (
+          <div
+            onClick={() => router.push(`${post.id}`)}
+            key={post.id}
+            className=' bg-slate-500 cursor-pointer  rounded-sm p-5'
+          >
+            <span>{post.text}</span>
+          </div>
+        ))}
       </div>
       {post && post !== 'not-found' ? (
         <div className=''>

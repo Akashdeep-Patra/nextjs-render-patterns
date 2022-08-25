@@ -58,7 +58,9 @@ const ServerSideGeneration: NextPage<{
       </div>
       {post && post !== 'not-found' ? (
         <div className=''>
-          <Post post={post} placeholder={placeholder} />
+          <Suspense fallback='Loading...'>
+            <Post post={post} placeholder={placeholder} />
+          </Suspense>
         </div>
       ) : (
         <div className='w-full flex justify-center items-center'>
