@@ -7,6 +7,7 @@ const nextConfig = {
   },
   experimental: {
     runtime: 'experimental-edge',
+    serverComponents: true,
   },
 };
 

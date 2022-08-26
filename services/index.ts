@@ -23,3 +23,13 @@ export const getPosts = ({ limit = 20, page = 0 } = {}) => {
 
 export const getPostDataById = (id: string) =>
   axiosInstance.get<IPost>(`https://dummyapi.io/data/v1/post/${id}`);
+
+export const delayedResponse = async <T>(
+  promise: () => Promise<T>,
+  delay = 1000
+) => {
+  const [res] = await Promise.all([
+    promise(),
+    new Promise((res) => setTimeout(res, delay)),
+  ]);
+};
