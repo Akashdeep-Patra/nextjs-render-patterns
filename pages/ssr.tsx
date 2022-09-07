@@ -9,7 +9,6 @@ export const getServerSideProps = async () => {
   const data = await Promise.all(
     posts.slice(0, 30).map((post) => getPostDataById(post.id))
   );
-
   return {
     props: {
       data,
